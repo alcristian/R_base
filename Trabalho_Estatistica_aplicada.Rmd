@@ -1,0 +1,88 @@
+---
+title: "Renda per capita dos municípios brasileiros"
+output: html_notebook
+---
+
+
+Introdução
+
+Este trabalho busca analisar o indicador economico Renda per capita do Brasil RDPC e correlacionalos com 5 variaveis explicativas.... 
+
+Este trabalho consiste em analisar a correlação entre diversos indicadores socioeconomicos e a Renda Per Capita do Brasileiro e encontrar pelo menos 5 indicadores explicativos 
+
+Todos os indicadores utilizados referem-se ao censo de 2000~2010. 
+
+--
+Metodo 
+
+
+Importar dados para a base a ser analise juntamento com a divisão por ano que temos na base. 
+
+```{r}
+#importanto Planilha para base_atlas_full
+library(readxl)
+base_atlas_full <- read_excel("C:\\Users\\alvaro\\Desktop\\R_Base\\atlas2013_dadosbrutos_pt_somente municipio.xlsx")
+
+#separação da base por ano
+basey_1991<- subset.data.frame(base_atlas_full, ANO==1991)
+
+basey_2000<- subset.data.frame(base_atlas_full, ANO==2000)
+
+basey_2010<- subset.data.frame(base_atlas_full, ANO==2010)
+
+#inclusão do RPDC2010 na base de 2000
+Y_RDPC_2010 <- c(basey_2010$RDPC)
+
+basey_2000 <- data.frame(basey_2000,Y_RDPC_2010)
+
+#View(basey_2000)
+
+```
+
+Usar dados de 2000 para as variaveis e 2010 como Y.
+
+Testando correlação de variaveis para encontrar as melhores variaveis que possam explicar Y=RDPC. 
+
+Teste de correlação entre RDPC com Escolaridade I_ESCOLARIDADE. 
+
+
+Histograma que representa a frequencia por renda per captita em toda a amostra.
+```{r}
+hist(basey_2000$Y_RDPC_2010)
+```
+A frequencia de casos com baixa renda é muito alta comparada com a alta renda per capita de alguns na amostra.
+
+```{r}
+#Quantidade de pessoas com renda per capita baixa é muito alta.
+
+hist(basey_2000$Y_RDPC_2010)
+
+hist(basey_2000$I_ESCOLARIDADE)
+
+#correlation formula = 0.8145292 81%
+
+cor.test(basey_2000$Y_RDPC_2010,basey_2000$E_ANOSESTUDO) 
+cor.test(basey_2000$Y_RDPC_2010,basey_2000$I_ESCOLARIDADE)
+
+cor.test(basey_2000$Y_RDPC_2010,basey_2000$T_ENV)
+cor.test(basey_2000$MULHERTOT,basey_2000$HOMEMTOT)
+
+plot(basey_2000$Y_RDPC_2010~basey_2000$I_ESCOLARIDADE)
+
+ANOSEST
+
+
+
+```
+
+
+
+
+2. Escolher 5 variáveis que possam ser consideradas explicativas para a renda per capita dos municípios. Pode-se optar por utilizar os municípios de uma UF apenas, ou de uma Região ou do Brasil todo.
+
+3. Fazer uma análise descritiva destas variáveis e da renda per capita.
+
+4. Aplicar a análise de regressão linear múltipla onde a VR é a renda per capita e as variáveis explicativas são as 5 escolhidas no passo 2.
+
+5. Entregar na forma de relatório que contenha introdução, procedimentos para a coleta, cálculos e análise estatística, resultados das análises com interpretações e conclusões finais.
+
