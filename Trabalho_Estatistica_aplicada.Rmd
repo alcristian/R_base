@@ -2,8 +2,6 @@
 title: "Renda per capita dos municípios brasileiros"
 output: html_notebook
 ---
-
-
 Introdução
 
 Este trabalho busca analisar o indicador economico Renda per capita do Brasil RDPC e correlacionalos com 5 variaveis explicativas.... 
@@ -13,10 +11,6 @@ Este trabalho consiste em analisar a correlação entre diversos indicadores socio
 Todos os indicadores utilizados referem-se ao censo de 2000~2010. 
 
 --
-Metodo 
-
-
-Importar dados para a base a ser analise juntamento com a divisão por ano que temos na base. 
 
 ```{r}
 #importanto Planilha para base_atlas_full
@@ -34,6 +28,8 @@ basey_2010<- subset.data.frame(base_atlas_full, ANO==2010)
 Y_RDPC_2010 <- c(basey_2010$RDPC)
 
 basey_2000 <- data.frame(basey_2000,Y_RDPC_2010)
+
+basey_rs<- subset.data.frame(basey_2000, UF==43)
 
 #View(basey_2000)
 
@@ -53,12 +49,6 @@ hist(basey_2000$Y_RDPC_2010)
 A frequencia de casos com baixa renda é muito alta comparada com a alta renda per capita de alguns na amostra.
 
 ```{r}
-#Quantidade de pessoas com renda per capita baixa é muito alta.
-
-hist(basey_2000$Y_RDPC_2010)
-
-hist(basey_2000$I_ESCOLARIDADE)
-
 #correlation formula = 0.8145292 81%
 
 cor.test(basey_2000$Y_RDPC_2010,basey_2000$E_ANOSESTUDO) 
@@ -69,12 +59,133 @@ cor.test(basey_2000$MULHERTOT,basey_2000$HOMEMTOT)
 
 plot(basey_2000$Y_RDPC_2010~basey_2000$I_ESCOLARIDADE)
 
-ANOSEST
 
+#step(lm(basey_2000$Y_RDPC_2010~.,data=basey_2000),direction="both")
+
+
+modelSte <- step(lm(basey_2000$Y_RDPC_2010~basey_2000$ESPVIDA + basey_2000$FECTOT + basey_2000$MORT1 + 
+basey_2000$MORT5 + basey_2000$RAZDEP + basey_2000$SOBRE40 + 
+basey_2000$SOBRE60 + basey_2000$T_ENV + basey_2000$E_ANOSESTUDO	+ 
+basey_2000$T_ANALF11A14 + basey_2000$T_ANALF15A17 + basey_2000$T_ANALF15M + 
+basey_2000$T_ANALF18A24	+ basey_2000$T_ANALF18M	+ basey_2000$T_ANALF25A29 + basey_2000$T_ANALF25M + basey_2000$T_ATRASO_0_BASICO + 
+basey_2000$T_ATRASO_0_FUND + basey_2000$T_ATRASO_0_MED + basey_2000$T_ATRASO_1_BASICO + basey_2000$T_ATRASO_1_FUND	+ 
+basey_2000$T_ATRASO_1_MED + basey_2000$T_ATRASO_2_BASICO + basey_2000$T_ATRASO_2_FUND + basey_2000$T_ATRASO_2_MED + 
+basey_2000$T_FBBAS + basey_2000$T_FBFUND + basey_2000$T_FBMED + basey_2000$T_FBPRE + basey_2000$T_FBSUPER + basey_2000$T_FLBAS + 
+basey_2000$T_FLFUND + basey_2000$T_FLMED + basey_2000$T_FLPRE + basey_2000$T_FLSUPER,data=basey_2000),direction="both")
+
+summary(modelSte)
+
+```
+
+
+```{r}
+#Analizing data RS
+dataset_RS <- lm(basey_rs$Y_RDPC_2010 ~ basey_rs$P_COM + 
+                      basey_rs$CPR + 
+                      basey_rs$TRABSC + 
+                      basey_rs$TRABCC + 
+                      basey_rs$HOMEMTOT + 
+                      basey_rs$MULHERTOT +
+                      basey_rs$T_CRIFUNDIN_TODOS +
+                      basey_rs$T_DENS +
+                      basey_rs$T_LIXO +
+                      basey_rs$T_LUZ +
+                      basey_rs$AGUA_ESGOTO + 
+                      basey_rs$T_NESTUDA_NTRAB_MMEIO +
+                      basey_rs$T_ENV +
+                      basey_rs$E_ANOSESTUDO +
+                      basey_rs$IDHM +
+                      basey_rs$MORT1 +
+                      basey_rs$T_SUPER25M +
+                      basey_rs$T_MED18M
+, data=basey_rs);
+
+summary(dataset_RS);
+
+#Analizing data RS removendo variaveis ~ Regressao linear
+dataset_RS <- lm(formula = basey_rs$Y_RDPC_2010 ~ basey_rs$T_DENS +
+                      basey_rs$AGUA_ESGOTO + 
+                      basey_rs$E_ANOSESTUDO +
+                      basey_rs$IDHM +
+                      basey_rs$MORT1 +
+                      basey_rs$pesoRUR +
+                      basey_rs$pesotot +
+                      basey_rs$pesourb +
+                      basey_rs$PIND +
+                      basey_rs$peso1517 +
+                      basey_rs$PESO1524 +
+                      basey_rs$PESO1618 +
+                      basey_rs$T_FREQ0A3 +
+                      basey_rs$T_FREQ11A14 +
+                      basey_rs$T_FREQ15A17 +
+                      basey_rs$T_FREQ18A24, data=basey_rs);
+
+
+
+summary(dataset_RS);
+plot(dataset_RS);
+
+step(dataset_RS, direction = "both");
+
+
+dataset_sug <- lm(formula = basey_rs$Y_RDPC_2010 ~ basey_rs$T_DENS + 
+    basey_rs$IDHM + basey_rs$MORT1 + basey_rs$PIND  + 
+    basey_rs$PESO1524, data = basey_rs)
+
+summary(dataset_sug);
+
+
+#plot(basey_rs$Município=="Porto Alegre"~basey_rs$Y_RDPC_2010
+
+#inspecionando as variaveis preditordas
+par(mfrow=c(1,2))
+
+plot(basey_rs$Y_RDPC_2010~basey_rs$T_DENS, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$AGUA_ESGOTO, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$PIND, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$IDHM, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$MORT1, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$I_ESCOLARIDADE, data=basey_rs)
+
+
+par(mfrow=c(1,1))
+
+
+#teste de correlação
+cor.test(basey_rs$PIND,basey_rs$AGUA_ESGOTO) 
+
+plot(all_variables)
+
+step(all_variables, direction = "both")
+
+
+anova(all_variables)
+
+#step(best_set, direction = "both")
+
+library(VGAM)
+#regresão multipla
+#reg_rs1 <- glm(basey_rs$RDPC~basey_rs$T_ENV + basey_rs$T_NESTUDA_NTRAB_MMEIO + basey_rs$T_LIXO + basey_rs$MULHERTOT + basey_rs$P_COM, family=binomial(link="logit"));
+#reg_rs1 <- vglm(basey_rs$Y_RDPC_2010~basey_rs$T_ENV + basey_rs$T_NESTUDA_NTRAB_MMEIO, family=multinomial(refLevel=1),data=basey_rs);
+
+#summary(reg_rs1)
 
 
 ```
 
+```{r}
+#TESTE DE VARIAVEIS vivi
+#vou jogar o LM pra dentro de uma variavel
+vivi_test <- lm(formula = basey_rs$Y_RDPC_2010 ~ basey_rs$GINI + basey_rs$PIND + basey_rs$PMPOB + basey_rs$PPOB + basey_rs$I_FREQ_PROP)
+
+summary(vivi_test)
+#dai vc pega o LM e faz um STEP
+
+step(vivi_test, direction = "both")
+
+
+
+```
 
 
 
