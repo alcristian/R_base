@@ -1,0 +1,78 @@
+---
+title: "R_Work"
+author: "Cristian Botelho"
+date: "3 de setembro de 2018"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+#Trabalho R Excercios.
+
+https://www.kaggle.com/fernandol/countries-of-the-world
+
+**Exercício 1 - Crie um dataframe com 10 colunas e 40 linhas e imprima na tela as primeiras 6 linhas.**
+
+*Task 1 - Create a dataframe with 10 colluns and 40 lines and then print on the screen the 6 firtst lines.*
+
+Importing data Dataframe and creation of df_world
+
+```{r}
+library(readxl)
+df_world <- read_excel("C:\\Users\\alvaro\\Desktop\\R_Base\\R_base\\countries of the world.xlsx")
+head(df_world)
+
+```
+
+**Exercício 2 - Mostre a que classe pertence cada uma das 10 colunas do seu dataframe.**
+* Show all datatypes from all collumns.*
+
+```{r}
+
+sapply (df_world,class)
+
+```
+
+
+**Exercício 3 - Utilize um comando que faça uma avaliação exploratórias das variáveis do seu dataframe e imprima na tela.** 
+*Use one command line witch makes an explanatory evaluation for all variables on your dataframe.*
+
+```{r}
+
+summary(df_world)
+
+```
+
+**Exercício 4 - Adicione mais uma coluna gerada a partir da transformação de uma das 10 originais. **
+*Add a new column which is a transformation, using some column of your dataframe.*
+
+```{r}
+#adicionando a Densidade populacional
+#creating column density.
+
+Density_sq <-round(df_world$Population/df_world$`Area (sq. mi.)`)
+
+df_world <- data.frame(df_world,Density_sq)
+
+```
+
+
+**Exercício 5 - Faça um gráfico que mostre a distribuição dos dados dessa nova variável do exercício 4.**
+*Create a graph witch explain the new colunm made up on task 4.*
+
+
+
+```{r}
+
+hist(df_world$Density_sq, breaks=10,main="Histogram Density");
+
+plot(df_world$GDP....per.capita.~df_world$Density_sq, type="p")
+
+library(ggplot2)
+
+ggplot(df_world, aes(x=Density_sq)) +
+    geom_histogram(binwidth=.5, colour="black", fill="white")
+
+```
+
+

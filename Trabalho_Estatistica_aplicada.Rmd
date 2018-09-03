@@ -77,6 +77,105 @@ summary(modelSte)
 
 ```
 
+```{r}
+
+#inspecionando as variaveis preditordas
+par(mfrow=c(1,2))
+
+plot(basey_rs$Y_RDPC_2010~basey_rs$T_DENS, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$PIND, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$MORT1, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$PESO1524, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$IDHM, data=basey_rs)
+
+par(mfrow=c(1,1))
+
+#analise descritiva IDH
+#summary IDH
+summary(basey_rs$IDHM);
+var(basey_rs$IDHM);
+hist(basey_rs$IDHM, breaks=10,main="Histogram IDHM ");
+plot(basey_rs$Codmun6, basey_rs$IDHM, type="l") 
+
+#analise descritiva T_DENS
+#summary T_DENS
+summary(basey_rs$T_DENS);
+var(basey_rs$T_DENS);
+hist(basey_rs$T_DENS, breaks=10,main="Histogram T_DENS ");
+plot(basey_rs$Codmun6, basey_rs$IDHM, type="l") 
+
+
+#analise descritiva MORT1
+#summary T_DENS
+summary(basey_rs$MORT1);
+var(basey_rs$MORT1);
+hist(basey_rs$MORT1, breaks=10,main="Histogram de MORT1 ");
+plot(basey_rs$Codmun6, basey_rs$MORT1, type="l") 
+
+
+#analise descritiva PESO1524
+#summary PESO1524
+summary(basey_rs$PESO1524);
+var(basey_rs$PESO1524);
+hist(basey_rs$PESO1524,main="Histogram de PESO1524 ");
+plot(basey_rs$PESO1524,main="Plot de PESO1524") 
+
+
+
+#analise descritiva PESO1524
+#summary PESO1524
+summary(basey_rs$PIND);
+var(basey_rs$PIND);
+hist(basey_rs$PIND,main="Histogram de PIND ");
+plot(basey_rs$PIND,main="Plot de PIND") 
+
+View(basey_rs)
+
+
+
+#Explicando correlacao linear
+cor.test(basey_rs$Y_RDPC_2010,basey_rs$IDHM)
+
+
+
+
+data_RS_ajuste <- lm(formula = basey_rs$Y_RDPC_2010 ~ basey_rs$T_DENS + 
+                                                   basey_rs$IDHM + 
+                                                   basey_rs$MORT1 + 
+                                                   basey_rs$PIND  +     
+                                                   basey_rs$PESO1524, data = basey_rs);
+
+data_RS_ajuste
+summary(data_RS_ajuste)
+
+
+anova(data_RS_ajuste)
+
+confint(data_RS_ajuste,level = 0.95)
+
+
+summary(data_RS_ajuste)
+
+qqnorm(residuals(data_RS_ajuste), ylab="Resíduos",xlab="Quantis teóricos",main="") 
+qqline(residuals(data_RS_ajuste))
+
+par(mfrow=c(2,3))
+plot(basey_rs$T_DENS,residuals(data_RS_ajuste),xlab="T_DENS",ylab="Resíduos")
+abline(h=0)
+plot(basey_rs$IDHM,residuals(data_RS_ajuste),xlab="IDHM",ylab="Resíduos")
+abline(h=0)
+
+plot(basey_rs$PIND,residuals(data_RS_ajuste),xlab="PIND",ylab="Resíduos")
+abline(h=0)
+
+plot(basey_rs$PESO1524,residuals(data_RS_ajuste),xlab="IDHM",ylab="Resíduos")
+abline(h=0)
+
+plot(basey_rs$MORT1,residuals(data_RS_ajuste),xlab="MORT1",ylab="Resíduos")
+abline(h=0)
+par(mfrow=c(1,1))
+```
+
 
 ```{r}
 #Analizing data RS
@@ -128,9 +227,7 @@ plot(dataset_RS);
 step(dataset_RS, direction = "both");
 
 
-dataset_sug <- lm(formula = basey_rs$Y_RDPC_2010 ~ basey_rs$T_DENS + 
-    basey_rs$IDHM + basey_rs$MORT1 + basey_rs$PIND  + 
-    basey_rs$PESO1524, data = basey_rs)
+
 
 summary(dataset_sug);
 
@@ -141,14 +238,106 @@ summary(dataset_sug);
 par(mfrow=c(1,2))
 
 plot(basey_rs$Y_RDPC_2010~basey_rs$T_DENS, data=basey_rs)
-plot(basey_rs$Y_RDPC_2010~basey_rs$AGUA_ESGOTO, data=basey_rs)
 plot(basey_rs$Y_RDPC_2010~basey_rs$PIND, data=basey_rs)
-plot(basey_rs$Y_RDPC_2010~basey_rs$IDHM, data=basey_rs)
 plot(basey_rs$Y_RDPC_2010~basey_rs$MORT1, data=basey_rs)
-plot(basey_rs$Y_RDPC_2010~basey_rs$I_ESCOLARIDADE, data=basey_rs)
-
+plot(basey_rs$Y_RDPC_2010~basey_rs$PESO1524, data=basey_rs)
+plot(basey_rs$Y_RDPC_2010~basey_rs$IDHM, data=basey_rs)
 
 par(mfrow=c(1,1))
+
+#analise descritiva IDH
+#summary IDH
+summary(basey_rs$IDHM);
+var(basey_rs$IDHM);
+hist(basey_rs$IDHM, breaks=10,main="Histogram IDHM ");
+plot(basey_rs$Codmun6, basey_rs$IDHM, type="l") 
+
+#analise descritiva T_DENS
+#summary T_DENS
+summary(basey_rs$T_DENS);
+var(basey_rs$T_DENS);
+hist(basey_rs$T_DENS, breaks=10,main="Histogram T_DENS ");
+plot(basey_rs$Codmun6, basey_rs$IDHM, type="l") 
+
+
+#analise descritiva MORT1
+#summary T_DENS
+summary(basey_rs$MORT1);
+var(basey_rs$MORT1);
+hist(basey_rs$MORT1, breaks=10,main="Histogram de MORT1 ");
+plot(basey_rs$Codmun6, basey_rs$MORT1, type="l") 
+
+
+#analise descritiva PESO1524
+#summary PESO1524
+summary(basey_rs$PESO1524);
+var(basey_rs$PESO1524);
+hist(basey_rs$PESO1524,main="Histogram de PESO1524 ");
+plot(basey_rs$PESO1524,main="Plot de PESO1524") 
+
+
+
+#analise descritiva PESO1524
+#summary PESO1524
+summary(basey_rs$PIND);
+var(basey_rs$PIND);
+hist(basey_rs$PIND,main="Histogram de PIND ");
+plot(basey_rs$PIND,main="Plot de PIND") 
+
+View(basey_rs)
+
+
+
+#Explicando correlacao linear
+cor.test(basey_rs$Y_RDPC_2010,basey_rs$IDHM)
+
+
+
+
+data_RS_ajuste <- lm(formula = basey_rs$Y_RDPC_2010 ~ basey_rs$T_DENS + 
+                                                   basey_rs$IDHM + 
+                                                   basey_rs$MORT1 + 
+                                                   basey_rs$PIND  +     
+                                                   basey_rs$PESO1524, data = basey_rs);
+
+data_RS_ajuste
+summary(data_RS_ajuste)
+
+
+anova(data_RS_ajuste)
+
+confint(data_RS_ajuste,level = 0.95)
+
+
+summary(data_RS_ajuste)
+
+qqnorm(residuals(data_RS_ajuste), ylab="Resíduos",xlab="Quantis teóricos",main="") 
+qqline(residuals(data_RS_ajuste))
+
+par(mfrow=c(2,3))
+plot(basey_rs$T_DENS,residuals(data_RS_ajuste),xlab="T_DENS",ylab="Resíduos")
+abline(h=0)
+plot(basey_rs$IDHM,residuals(data_RS_ajuste),xlab="IDHM",ylab="Resíduos")
+abline(h=0)
+
+plot(basey_rs$PIND,residuals(data_RS_ajuste),xlab="PIND",ylab="Resíduos")
+abline(h=0)
+
+plot(basey_rs$PESO1524,residuals(data_RS_ajuste),xlab="IDHM",ylab="Resíduos")
+abline(h=0)
+
+plot(basey_rs$MORT1,residuals(data_RS_ajuste),xlab="MORT1",ylab="Resíduos")
+abline(h=0)
+par(mfrow=c(1,1))
+
+
+plot(fitted(data_RS_ajuste),residuals(data_RS_ajuste),xlab="Valores Ajustados",ylab="Resíduos")
+
+
+abline(h=0)
+
+
+shapiro.test(residuals(data_RS_ajuste))
 
 
 #teste de correlação
@@ -160,15 +349,6 @@ step(all_variables, direction = "both")
 
 
 anova(all_variables)
-
-#step(best_set, direction = "both")
-
-library(VGAM)
-#regresão multipla
-#reg_rs1 <- glm(basey_rs$RDPC~basey_rs$T_ENV + basey_rs$T_NESTUDA_NTRAB_MMEIO + basey_rs$T_LIXO + basey_rs$MULHERTOT + basey_rs$P_COM, family=binomial(link="logit"));
-#reg_rs1 <- vglm(basey_rs$Y_RDPC_2010~basey_rs$T_ENV + basey_rs$T_NESTUDA_NTRAB_MMEIO, family=multinomial(refLevel=1),data=basey_rs);
-
-#summary(reg_rs1)
 
 
 ```
