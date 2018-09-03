@@ -1,13 +1,16 @@
 ---
 title: "R_Work"
-author: "Cristian Botelho"
+author: "Alvaro Cristian Botelho"
 date: "3 de setembro de 2018"
 output:
   word_document: default
   pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 #Trabalho R Excercios.
+Neste trabalho foi utilizada o dataset ~countries of the world~ obtido no Kaggle. 
 
 https://www.kaggle.com/fernandol/countries-of-the-world
 
@@ -15,11 +18,13 @@ https://www.kaggle.com/fernandol/countries-of-the-world
 
 *Task 1 - Create a dataframe with 10 colluns and 40 lines and then print on the screen the 6 firtst lines.*
 
-Importing data Dataframe and creation of df_world
+
 
 ```{r}
+#Importing data Dataframe and creation of df_world
+
 library(readxl)
-df_world <- read_excel("C:\\Users\\alvaro\\Desktop\\R_Base\\R_base\\countries of the world.xlsx")
+df_world <- read_excel(".\\countries of the world.xlsx")
 head(df_world)
 
 ```
@@ -67,11 +72,6 @@ df_world <- data.frame(df_world,Density_sq)
 hist(df_world$Density_sq, breaks=10,main="Histogram Density");
 
 plot(df_world$GDP....per.capita.~df_world$Density_sq, type="p")
-
-library(ggplot2)
-
-ggplot(df_world, aes(x=Density_sq)) +
-    geom_histogram(binwidth=.5, colour="black", fill="white")
 
 ```
 
